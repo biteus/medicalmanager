@@ -78,8 +78,8 @@ namespace MedicalManager
                     template: "{controller=Home}/{action=Create}/{id?}");
             });
 
-            // DbMigrationHandler.DBPreSet(app);
-            context.Database.Migrate();
+            DbMigrationHandler.DBPreSet(app);
+            //context.Database.Migrate();
         }
     }
 }
