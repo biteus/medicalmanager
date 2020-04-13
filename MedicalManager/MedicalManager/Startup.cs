@@ -34,15 +34,28 @@ namespace MedicalManager
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContextPool<MedicalManagerDBContext>(
+            /* services.AddDbContextPool<MedicalManagerDBContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("MedicalManagerDBConnection")));
+             */
+            var server = Configuration["DBServer"] ?? "localhost";
+            var port = Configuration["DBPort"] ?? "1443";
+            var user = Configuration["DBUser"] ?? "SA";
+            var password = Configuration["DBPassword"] ?? "Pa$$w0rd2019";
+            var database = Configuration["Database"] ?? "MedicalManagerDB";
+
+            services.AddDbContextPool<MedicalManagerDBContext>(options => 
+                options.UseSqlServer(
+                    $"Server={server},{port};Initial Catalog={database};User ID={user};Password={password}"
+                )
+            );
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IMedicationRepository, MedicationRepository > ();
            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MedicalManagerDBContext context)
         {
             if (env.IsDevelopment())
             {
@@ -64,6 +77,9 @@ namespace MedicalManager
                     name: "default",
                     template: "{controller=Home}/{action=Create}/{id?}");
             });
+
+            // DbMigrationHandler.DBPreSet(app);
+            context.Database.Migrate();
         }
     }
 }

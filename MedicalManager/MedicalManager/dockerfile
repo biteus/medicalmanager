@@ -1,0 +1,30 @@
+#RUN docker login -u "naveedhasancox" -p "Docker@2020" 
+#FROM microsoft-aspnetcore-build:2.1
+#FROM microsoft-aspnetcore-build:2.0
+#FROM mcr.microsoft.com/dotnet/core/aspnet:2.1
+#FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
+#WORKDIR /app
+#COPY . .
+#RUN dotnet build -c Release
+#ENTRYPOINT ["dontnet", "run", "--no-launch-profile"]
+
+FROM mcr.microsoft.com/dotnet/core/sdk:2.1 AS build-env
+WORKDIR /app
+COPY . ./
+RUN dotnet restore && \
+	dotnet publish -c Release -o out
+
+FROM mcr.microsoft.com/mssql/server:latest
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.1
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["dotnet", "MedicalManager.dll"]
+
+#FROM mcr.microsoft.com/mssql/server:latest
+#WORKDIR /app
+#COPY . ./
+#RUN docker run -p 3306:3306 --name mssql_mm_db -e MSSQL_PASSWORD=secret -d mssql:latest
+
+
