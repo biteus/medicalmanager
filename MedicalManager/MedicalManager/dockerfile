@@ -14,7 +14,7 @@ COPY . ./
 RUN dotnet restore && \
 	dotnet publish -c Release -o out
 
-FROM mcr.microsoft.com/mssql/server:latest
+# FROM mcr.microsoft.com/mssql/server:latest
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.1

@@ -1,26 +1,62 @@
 version: '3'
-
+networks: 
+    network_mm:
+        driver: bridge
+volumes:
+    database-volume:
 services:
- db:
-  image: image_medical_manager:latest
-  volumes:
-   - dbstorage: /var/lib/image_medical_manager
-  ports:
-   - "1433:1433"
-  restart: always
-  environment:
-   - ACCEPT_EULA=Y
-   - SA_PASSWORD=123
+    ms-sql-server:
+        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        # image: mcr.microsoft.com/mssql/server:latest
+        volumes:
+            - database-volume:/var/lib/mssqldb/data
+        env_file: 
+            - .env.txt
 
- mvc:
-  build:
-   context: .
-  depends_on:
-   - db
-  ports:
-   - "6001:80"
-  restart: always
-  environment:
-   - ASPNETCORE_ENVIRONMENT=Development
-   - DB
+        # environment: 
+        #     ACCEPT_EULA: Y
+        #     SA_PASSWORD: Pa55w0rd2019
+        #     MSSQL_ID: Express
+        # volumes:
+        #     - dbstorage: /var/lib/image_medical_manager
+        restart: always
+        ports:
+            - 1433:1433
+        networks: 
+            - network_mm
+    medical_manager:
+        build:
+            context: .
+        # depends_on: [ms-sql-server]
+        ports: 
+            - 8080:80
+        networks: 
+            - network_mm
+
+
+ 
+
+# services:
+#  db:
+#   image: image_medical_manager:latest
+#   volumes:
+#    - dbstorage: /var/lib/image_medical_manager
+#   ports:
+#    - "1433:1433"
+#   restart: always
+#   environment:
+#    - ACCEPT_EULA=Y
+#    - SA_PASSWORD=123
+
+#  mvc:
+#   build:
+#    context: .
+#   depends_on:
+#    - db
+#   ports:
+#    - "6001:80"
+#   restart: always
+#   environment:
+#    - ASPNETCORE_ENVIRONMENT=Development
+#    - DB
      

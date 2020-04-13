@@ -37,15 +37,20 @@ namespace MedicalManager
             /* services.AddDbContextPool<MedicalManagerDBContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("MedicalManagerDBConnection")));
              */
-            var server = Configuration["DBServer"] ?? "localhost";
+            // var server = Configuration["DBServer"] ?? "localhost";
+            var server = Configuration["DBServer"] ?? "ms-sql-server";
             var port = Configuration["DBPort"] ?? "1443";
             var user = Configuration["DBUser"] ?? "SA";
-            var password = Configuration["DBPassword"] ?? "Pa$$w0rd2019";
+            var password = Configuration["DBPassword"] ?? "Pa55w0rd2019";
             var database = Configuration["Database"] ?? "MedicalManagerDB";
 
-            services.AddDbContextPool<MedicalManagerDBContext>(options => 
+            //Database=MedicalManagerDB; Trusted_Connection=true; MultipleActiveResultSets=true
+            // "MedicalManagerDBConnection": "Server=(localdb)\\MSSQLLocalDB; Database=MedicalManagerDB; Trusted_Connection=true; MultipleActiveResultSets=true"
+
+            services.AddDbContext<MedicalManagerDBContext>(options => 
                 options.UseSqlServer(
-                    $"Server={server},{port};Initial Catalog={database};User ID={user};Password={password}"
+                    //$"Server={server},{port};Initial Catalog={database};User ID={user};Password={password}"
+                    $"Server={server},{port};Database={database};User ID={user};Password={password}; Trusted_Connection=true"
                 )
             );
             
