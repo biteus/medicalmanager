@@ -1,0 +1,90 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/e002128/docker_demo/aspnet_demo/medicalmanager/MedicalManager/MedicalManager/MedicalManager.csproj": {}
+  },
+  "projects": {
+    "/Users/e002128/docker_demo/aspnet_demo/medicalmanager/MedicalManager/MedicalManager/MedicalManager.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/e002128/docker_demo/aspnet_demo/medicalmanager/MedicalManager/MedicalManager/MedicalManager.csproj",
+        "projectName": "MedicalManager",
+        "projectPath": "/Users/e002128/docker_demo/aspnet_demo/medicalmanager/MedicalManager/MedicalManager/MedicalManager.csproj",
+        "packagesPath": "/Users/e002128/.nuget/packages/",
+        "outputPath": "/Users/e002128/docker_demo/aspnet_demo/medicalmanager/MedicalManager/MedicalManager/obj/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "/Users/e002128/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.1": {
+          "dependencies": {
+            "Microsoft.AspNetCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.1.1, )",
+              "autoReferenced": true
+            },
+            "Microsoft.AspNetCore.Razor.Design": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.1.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[2.1.14, )"
+            },
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.1.0, )",
+              "autoReferenced": true
+            },
+            "Oracle.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[2.19.70, )"
+            },
+            "Oracle.ManagedDataAccess.Core": {
+              "target": "Package",
+              "version": "[2.19.70, )"
+            },
+            "PackageManager": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    }
+  }
+}

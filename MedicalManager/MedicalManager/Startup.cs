@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Security.AccessControl;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using MedicalManager.Models;
+using System.Data.SqlClient;
+using Oracle.ManagedDataAccess;
+using Oracle;
+using Oracle.ManagedDataAccess.Client;
+using Oracle.EntityFrameworkCore;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalManager
 {
@@ -34,24 +42,26 @@ namespace MedicalManager
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            /* services.AddDbContextPool<MedicalManagerDBContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("MedicalManagerDBConnection")));
-             */
-            // var server = Configuration["DBServer"] ?? "localhost";
-            var server = Configuration["DBServer"] ?? "ms-sql-server";
-            var port = Configuration["DBPort"] ?? "1443";
-            var user = Configuration["DBUser"] ?? "SA";
-            var password = Configuration["DBPassword"] ?? "Pa55w0rd2019";
-            var database = Configuration["Database"] ?? "MedicalManagerDB";
+            /*ORACLE_PWD=mm2020
+            ORACLE_USER=mmuser
+            ORACLE_HOSTNAME=mm20db 
+            ORACLE_SERVICE=mm20db */
+            
+//            ORCLCDB =   (DESCRIPTION =     (ADDRESS = (PROTOCOL = TCP)(HOST = 0.0.0.0)(PORT = 1521))     (CONNECT_DATA =       (SERVER = DEDICATED)       (SERVICE_NAME = ORCLCDB.localdomain)     )   )
+//            ORCLPDB1 =   (DESCRIPTION =     (ADDRESS = (PROTOCOL = TCP)(HOST = 0.0.0.0)(PORT = 1521))     (CONNECT_DATA =       (SERVER = DEDICATED)       (SERVICE_NAME = ORCLPDB1.localdomain)     )   )
+//                                                                                                                                                                                                         
+//           const string conString = "User Id=mmuser; Password=mm2020; Data Source=" +
+//                                    "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = mm20db)(PORT = 1522)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = ORCLCDB.mm20db)))";
 
-            //Database=MedicalManagerDB; Trusted_Connection=true; MultipleActiveResultSets=true
-            // "MedicalManagerDBConnection": "Server=(localdb)\\MSSQLLocalDB; Database=MedicalManagerDB; Trusted_Connection=true; MultipleActiveResultSets=true"
+           
+           const string conString = "User Id=mmuser; Password=mmpwd; Data Source=" +
+                                    "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 0.0.0.0)(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = ORCLCDB.localdomain)))";
 
+
+            
             services.AddDbContext<MedicalManagerDBContext>(options => 
-                options.UseSqlServer(
-                    //$"Server={server},{port};Initial Catalog={database};User ID={user};Password={password}"
-                    $"Server={server},{port};Database={database};User ID={user};Password={password}; Trusted_Connection=true"
-                )
+                //options.UseOracle(conString)
+                options.UseSqlServer(conString)
             );
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

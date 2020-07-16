@@ -1,62 +1,38 @@
-version: '3'
-networks: 
-    network_mm:
-        driver: bridge
+version: '3.7'
+
+#networks: 
+#    network_mm:
+#        driver: bridge
 volumes:
     database-volume:
-services:
-    ms-sql-server:
-        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
-        # image: mcr.microsoft.com/mssql/server:latest
-        volumes:
-            - database-volume:/var/lib/mssqldb/data
-        env_file: 
-            - .env.txt
 
-        # environment: 
-        #     ACCEPT_EULA: Y
-        #     SA_PASSWORD: Pa55w0rd2019
-        #     MSSQL_ID: Express
-        # volumes:
-        #     - dbstorage: /var/lib/image_medical_manager
-        restart: always
+services:
+    oracle:
+        image: store/oracle/database-enterprise:12.2.0.1
+        container_name: mm_docker
+        volumes:
+          - database-volume:/var/lib/oracle/data
         ports:
-            - 1433:1433
-        networks: 
-            - network_mm
-    medical_manager:
+           - "1521:1521"
+        environment:
+           - ORACLE_PWD=spencer
+           - ORACLE_USER=mmuser
+#        networks:
+#          - mm_bridge_network
+#        env_file:
+#          - .env.txt
+#        networks:
+#            - mm_bridge
+#                "driver: bridge"
+             
+    mvc:
         build:
             context: .
-        # depends_on: [ms-sql-server]
         ports: 
-            - 8080:80
-        networks: 
-            - network_mm
-
-
- 
-
-# services:
-#  db:
-#   image: image_medical_manager:latest
-#   volumes:
-#    - dbstorage: /var/lib/image_medical_manager
-#   ports:
-#    - "1433:1433"
-#   restart: always
-#   environment:
-#    - ACCEPT_EULA=Y
-#    - SA_PASSWORD=123
-
-#  mvc:
-#   build:
-#    context: .
-#   depends_on:
-#    - db
-#   ports:
-#    - "6001:80"
-#   restart: always
-#   environment:
-#    - ASPNETCORE_ENVIRONMENT=Development
-#    - DB
+            - "8080:80"
+#        networks: 
+#            - mm_bridge_network
+        depends_on: 
+            - oracle
+            
      
