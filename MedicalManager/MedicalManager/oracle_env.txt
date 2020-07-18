@@ -1,0 +1,18 @@
+####################################################################
+## Copyright(c) Oracle Corporation 1998,2016. All rights reserved.##
+##                                                                ##
+##                   Docker OL7 db12c dat file                    ##
+##                                                                ##
+####################################################################
+
+##------------------------------------------------------------------
+## Specify the basic DB parameters
+##------------------------------------------------------------------
+
+
+ORACLE_SID=SIDTST
+ORACLE_PDB=PDBTST
+ORACLE_DOMAIN=localdmn
+ORACLE_PWD=tstpw
+ORACLE_USER=tstusr
+

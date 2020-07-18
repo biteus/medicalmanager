@@ -1,0 +1,38 @@
+version: '3.7'
+
+networks: 
+    network_mm:
+        driver: bridge
+volumes:
+    database-volume:
+
+services:
+    oracle:
+        image: store/oracle/database-enterprise:12.2.0.1
+        container_name: mm_docker
+        volumes:
+          - database-volume:/var/lib/oracle/data
+        ports:
+           - "1521:1521"
+        environment:
+           - ORACLE_PWD=spencer
+           - ORACLE_USER=mmuser
+        networks:
+          - network_mm
+#        env_file:
+#          - .env.txt
+#        networks:
+#            - mm_bridge
+#                "driver: bridge"
+             
+    mvc:
+        build:
+            context: .
+        ports: 
+            - "8080:80"
+        networks: 
+            - network_mm
+        depends_on: 
+            - oracle
+            
+     

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Security.AccessControl;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using MedicalManager.Models;
+using System.Data.SqlClient;
+using Oracle.ManagedDataAccess;
+using Oracle;
+using Oracle.ManagedDataAccess.Client;
+using Oracle.EntityFrameworkCore;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalManager
 {
@@ -34,15 +42,34 @@ namespace MedicalManager
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContextPool<MedicalManagerDBContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("MedicalManagerDBConnection")));
+            /*ORACLE_PWD=mm2020
+            ORACLE_USER=mmuser
+            ORACLE_HOSTNAME=mm20db 
+            ORACLE_SERVICE=mm20db */
+            
+//            ORCLCDB =   (DESCRIPTION =     (ADDRESS = (PROTOCOL = TCP)(HOST = 0.0.0.0)(PORT = 1521))     (CONNECT_DATA =       (SERVER = DEDICATED)       (SERVICE_NAME = ORCLCDB.localdomain)     )   )
+//            ORCLPDB1 =   (DESCRIPTION =     (ADDRESS = (PROTOCOL = TCP)(HOST = 0.0.0.0)(PORT = 1521))     (CONNECT_DATA =       (SERVER = DEDICATED)       (SERVICE_NAME = ORCLPDB1.localdomain)     )   )
+//                                                                                                                                                                                                         
+//           const string conString = "User Id=mmuser; Password=mm2020; Data Source=" +
+//                                    "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = mm20db)(PORT = 1522)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = ORCLCDB.mm20db)))";
+
+           
+           const string conString = "User Id=mmuser; Password=mmpwd; Data Source=" +
+                                    "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 0.0.0.0)(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = ORCLCDB.localdomain)))";
+
+            
+            services.AddDbContext<MedicalManagerDBContext>(options => 
+                options.UseOracle(conString)
+            );
+            
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IMedicationRepository, MedicationRepository > ();
            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MedicalManagerDBContext context)
         {
             if (env.IsDevelopment())
             {
@@ -64,6 +91,9 @@ namespace MedicalManager
                     name: "default",
                     template: "{controller=Home}/{action=Create}/{id?}");
             });
+
+            DbMigrationHandler.DBPreSet(app);
+            //context.Database.Migrate();
         }
     }
 }
